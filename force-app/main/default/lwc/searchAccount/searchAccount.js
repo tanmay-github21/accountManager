@@ -59,7 +59,7 @@ export default class SearchAccount extends NavigationMixin(LightningElement){
         if(foundAct){
             this.showDetails=true;
             this.selectedAccount=foundAct;
-            console.log('Selected account'+'\t'+this.selectedAccount); 
+            console.log('Account value selected'+'\t'+this.selectedAccount); 
         }
     }
     closeModal(){this.isModalOpen=false; console.log('Modal is closed');}
@@ -69,6 +69,26 @@ export default class SearchAccount extends NavigationMixin(LightningElement){
         const defaultValues=encodeDefaultFieldValues({Name:this.searchKey});
         console.log('Modal Box'+'\t'+defaultValues);
         this[NavigationMixin.Navigate]({type:'standard__objectPage', attributes:{objectApiName:'Account', actionName:'new'}, state:{defaultFieldValues:defaultValues}});
+    }
+    get accountIndustry(){
+        console.log('for account:\t'+this.selectedAccount?.Name+'\tIndustry value is:\t'+this.selectedAccount?.Industry);
+        return this.selectedAccount?.Industry || 'Industry isnt available';
+    }
+    get accountName(){
+        console.log('for account:\t'+this.selectedAccount?.Name+'\tName value is:\t'+this.selectedAccount?.Name);
+        return this.selectedAccount?.Name || 'Name Not Available';
+    }
+    get accountRating(){
+        console.log('for account:\t'+this.selectedAccount?.Name+'\tRating value is:\t'+this.selectedAccount?.Rating);
+        return this.selectedAccount?.Rating || 'Rating isnt available';
+    }
+    get accountWebsite(){
+        console.log('for account:\t'+this.selectedAccount?.Name+'\tWebsite value is:\t'+this.selectedAccount?.Website);
+        return this.selectedAccount?.Website || 'Website isnt available';
+    }
+    get accountPhone(){
+        console.log('for account:\t'+this.selectedAccount?.Name+'\tPhone value is:\t'+this.selectedAccount?.Phone);
+        return this.selectedAccount?.Phone || 'Phone isnt available';
     }
 
     

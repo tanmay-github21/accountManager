@@ -1,6 +1,8 @@
 import { LightningElement, track, wire} from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import { encodeDefaultFieldValues } from 'lightning/pageReferenceUtils';
+//import {publish,MessageContext} from 'lightning/messageService';
+//import ACCOUNT_CHANNEL from '@salesforce/messageChannel/AccountDataChannel__c';
 import searchAccounts from '@salesforce/apex/accountSearchController.searchAccounts';
 import createAccount from '@salesforce/apex/accountSearchController.createAccount'; 
 import {ShowToastEvent} from 'lightning/platformShowToastEvent';
@@ -9,7 +11,7 @@ export default class SearchAccount extends NavigationMixin(LightningElement){
     searchKey='';
     searchResults=[];
     selectedAccountId='';
-    selectedAccount=null;
+    @track selectedAccount=null; @track fromAccount={};
     
     showToast(title, message, variant){
         const evt= new ShowToastEvent({title:title, message:message, variant:variant});

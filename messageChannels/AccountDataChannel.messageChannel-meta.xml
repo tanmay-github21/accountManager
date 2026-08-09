@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <masterLabel>Account Data Channel</masterLabel>
+    <isExposed>true</isExposed>
+    <description>Publishes account search, selection, and update events.</description>
+    <lightningMessageFields>
+        <fieldName>recordId</fieldName>
+        <description>Target Account ID</description>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <fieldName>accountData</fieldName>
+        <description>Selected or modified Account record object</description>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <fieldName>actionType</fieldName>
+        <description>Type of action (SEARCH, SELECT, UPDATE, CREATE)</description>
+    </lightningMessageFields>
+</LightningMessageChannel>

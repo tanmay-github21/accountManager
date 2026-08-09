@@ -1,0 +1,92 @@
+<template>
+    <lightning-card title="Account Manager & Validator">
+         <div class="slds-m-around_medium">
+            <!-- Search Section-->
+             <div class="slds-grid slds-gutters slds-m-bottom_medium">
+                 <div class="slds-col slds-size_2-of-3">
+                     <lightning-input type="search" label="Search Account Name" value={searchKey} onchange={handleSearchKeyChange}></lightning-input>
+                 </div>
+                 <div class="slds-col slds-size_1-of-3 slds-m-top_large">
+                    <lightning-button label="Search" variant="brand" onclick={handleSearch}></lightning-button>
+                 </div>
+             </div>
+            <!--SEARCH RESULT LIST--> 
+            <template lwc:if={hasSearchResults}>
+                <p class="slds-text-title_bold slds-m-bottom_small"> Select an account from the list</p>
+                <lightning-radio-group name="accountRadioGroup" options={accountOptions} value={selectedAccountId} type="radio" onchange={handleAccountSelect}></lightning-radio-group>
+                <lightning-button label="Show Details" variant="natural" class="slds-m-top_small" disabled={isDetailsBtnDisabled} onclick={handleShowDetails}></lightning-button>
+            </template>
+            <!--RECORD DETAILS DISPLAY-->
+            <template lwc:if={showDetails}>
+                <div class="slds-box slds-m-top_medium slds-theme_shade">
+                    <h3 class="slds-text-heading_small slds-m-bottom_small"> Account Details</h3>
+                    <p> <strong>Name:</strong> {selectedAccount.Name} </p>
+                    <p> <strong>Industry:</strong>{selectedAccount.Industry}</p>
+                    <p> <strong>Rating:</strong>{selectedAccount.Rating}</p>
+                    <p> <strong>Website:</strong>{selectedAccount.Website}</p>
+                    <p> <strong>Phone:</strong>{selectedAccount.Phone}</p>
+                </div>
+            </template>
+         </div>
+    </lightning-card>
+    <!--NO RECORD FOUND-->
+    <template lwc:if={isModalOpen}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open slds-modal_small">
+             <div class="slds-modal__container">
+                <!--Header definition-->
+                <header class="slds-modal__header slds-theme_alert-texture">
+                    <button class="slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small"></lightning-icon>
+                        <span class="slds-asssitive-text">Close</span>
+                    </button>
+                    <h2 class="slds-modal__title slds-hyphenate slds-text-heading_medium" id="modal-heading-01"> No records found</h2>
+                </header>
+                <!--Body of header-->
+                <div class="slds-modal__content slds-p-around_large slds-text-align_center">
+                    <!--Warning/Info Icon Badge-->
+                    <div class="slds-m-bottom_medium">
+                        <lightning-icon icon-name="utility:search" variant="warning" size="large"></lightning-icon>
+                    </div>
+                    <p class="slds-text-heading_small slds-m-bottom_x-small">No records matched to "<strong>{searchKey}</strong>".Would you like to create a new account?</p>
+                    <!--Search Key Highlight Badge-->
+                    <div class="slds-m-vertical_small">
+                        <span class="slds-badge slds-badge_lightweight slds-p-horizontal_medium slds-p-vertical_xx-small slds-text-heading_small"> "{searchKey}"</span>
+                    </div>
+                    <p class="slds-text-body_regular slds-text-color_weak"> Would you like to create an account record with this name now?</p>
+                </div>
+                <footer class="slds-modal__footer slds-theme_default">
+                    <lightning-button label="Yes" variant="brand" onclick={openCreationForm} icon-name="utility:add"></lightning-button>
+                    <lightning-button label="No" variant="neutral" onclick={closeModal} class="slds-m-right_x-small"></lightning-button>
+                </footer>
+             </div>
+        </section>
+        <!--BACK-DROP (BLURS THE BACK-GROUND)-->
+        <div class="slds-backdrop slds-backdrop-open" role="presentation"></div>
+    </template>
+    <!--CREATE ACCOUNT FROM MODAL-->
+    <template lwc:if={isCreateFormOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 class="slds-modal__title slds-hyphenate"> Create New Account</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <!--DISPLAY ERROR IF SERVER VALIDATION FAILS-->
+                    <template lwc:if={serverError}>
+                        <div class="slds-notify slds-notify_alert slds-alert_error slds-m-bottom_small" role="alert">
+                            <h2>{serverError}</h2>
+                        </div>
+                    </template>
+                    <lightning-input label="Account Name" value={newAccName} onchange={handleNameChange} class="name-input"></lightning-input>
+                    <lightning-input label="Employee Count" type="number" value={newAccEmployees} onchange={handleEmployeeChange} class="employee-input"></lightning-input>
+                    <lightning-input label="Industry" value={newAccIndustry} onchange={handleIndustryChange}></lightning-input>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button label="Save Account" variant="brand" onclick={handleSaveAccount}></lightning-button>
+                    <lightning-button label="Cancel" variant="neutral" onclick={closeCreateForm} class="slds-m-right_x-small"></lightning-button>
+                </footer>
+            </div> 
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

@@ -1,0 +1,19 @@
+<template>
+    <lightning-card title="parentComponent" class="slds-size_3-of-12">
+        <div class="slds-m-left_small">
+           <c-child-lwc onchild={show}></c-child-lwc>
+            <div class="slds-m-top_small">
+                <p lwc:if={name}><strong>Account's_Name</strong>{name}</p>
+                <p lwc:if={industry}><strong>Account's Industry</strong>{industry}</p>
+                <p lwc:if={rating}><strong>Account's Rating</strong> {rating} </p>
+                <p lwc:if={website}> <strong> Account's Website</strong> {website}</p>
+            </div>
+        </div>
+    </lightning-card>
+    <lightning-card title="TestEvent">
+        <div class="slds-m-around_medium" ontestevent={handleParentContainerEvent}>
+            <p> Parent Received:{parentLog}</p>
+            <c-child-lwc ontestevent={handleTestEvent}></c-child-lwc>
+        </div>
+    </lightning-card>
+</template>

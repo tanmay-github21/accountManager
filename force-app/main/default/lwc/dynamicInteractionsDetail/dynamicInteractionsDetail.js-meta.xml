@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets> 
+         <target>lightning__AppPage</target>
+         <target>lightning__RecordPage</target>
+    </targets>
+    <targetConfigs> 
+        <targetConfig targets="lightning__AppPage"> 
+             <event name="accountSelected" label="Account Selected" description="Fires the id of the received account"> 
+                  <schema>
+                       {
+                            "type":"object", 
+                            "properties":{
+                                "recordId":{"type":"string","title":"Record Id","description":"18 digits record id"}
+                            }
+
+                       }
+                  </schema>
+             </event>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

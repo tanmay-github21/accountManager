@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>65.0</apiVersion>
-    <isExposed>false</isExposed>
+    <isExposed>true</isExposed>
+    <targets>
+         <target>lightning__AppPage</target>
+    </targets>
+    <targetConfigs>
+         <targetConfig targets="lightning__AppPage">
+              <event name="accountselected" label="Account Selected" description="Fire the event"> 
+                   <schema>
+                   {
+                        "type":"object",
+                        "properties":{
+                            "recordid":{"type":"string", "title":"Record Id","description":"18 digit"}
+                        }
+                   }
+                   </schema>
+              </event>
+         </targetConfig>
+    </targetConfigs>
 </LightningComponentBundle>

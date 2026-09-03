@@ -35,4 +35,26 @@ public with sharing class accountBillingState {
             }
         }
     }
+
+    public static void checkOpportunity(list<opportunity> ops){
+        set<id> acctIds=new set<id>(); 
+        list<opportunity> oq= new list<opportunity>();
+        for(Opportunity o1:ops){
+            if(o1.accountId !=null) acctIds.add(o1.accountId);
+        }
+        map<Id,Account> accMap=new map<id,Account>([select Id,(select id from opportunities where isClosed=false) from account where id in:acctIds]);
+        for(opportunity o1:ops){
+            if(o1.accountId !=null && accMap.containsKey(o1.accountId)){
+                if(accMap.get(o1.accountId).opportunities.size() <4) oq.add(o1);
+                else{
+                    o1.addError('No more than 4 active opportunities');
+                    list<database.error> errors=new list<database.error>();
+                    for(database.error er:errors)
+                    System.debug('Account has more than 4 active opportunities'+'\n'+
+                    'Error Status Code'+'\t'+er.getStatusCode());
+                } //account has more than 4 active opty
+            }
+        }
+        insert oq; 
+    }
 }

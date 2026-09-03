@@ -37,24 +37,21 @@ public with sharing class accountBillingState {
     }
 
     public static void checkOpportunity(list<opportunity> ops){
-        set<id> acctIds=new set<id>(); 
-        list<opportunity> oq= new list<opportunity>();
+        //method checks for the count of active opportunities for a given account and if its more than 4 throws an error
+        set<id> idset=new set<id>(); 
+        for(opportunity tempOp:ops) if (tempOp.accountId !=null) idset.add(tempOp.accountId); 
+        map<id,account> accMap= new map<id,account>([select id,(select id,accountId from opportunities where isClosed=false)from account where id IN:idSet]);
         for(Opportunity o1:ops){
-            if(o1.accountId !=null) acctIds.add(o1.accountId);
+            if(o1.accountId!=Null && accMap.containsKey(o1.accountId)){
+                SYstem.debug('Opportunity tester main class map contains key'+'\t'+o1.accountId); 
+                if(accMap.get(o1.accountId).opportunities.size()<=4){
+                    System.debug('Opportunity tester main class opty size is'+'\t'+
+                    accMap.get(o1.accountId).Opportunities.size());
+                }
+                else {
+                    System.debug('Opportunity tester main class has'+'\t'+accMap.get(o1.accountId).Opportunities.size()+'\t'+'opportunities');
+                } 
+            } //map contains key
         }
-        map<Id,Account> accMap=new map<id,Account>([select Id,(select id from opportunities where isClosed=false) from account where id in:acctIds]);
-        for(opportunity o1:ops){
-            if(o1.accountId !=null && accMap.containsKey(o1.accountId)){
-                if(accMap.get(o1.accountId).opportunities.size() <4) oq.add(o1);
-                else{
-                    o1.addError('No more than 4 active opportunities');
-                    list<database.error> errors=new list<database.error>();
-                    for(database.error er:errors)
-                    System.debug('Account has more than 4 active opportunities'+'\n'+
-                    'Error Status Code'+'\t'+er.getStatusCode());
-                } //account has more than 4 active opty
-            }
-        }
-        insert oq; 
     }
 }

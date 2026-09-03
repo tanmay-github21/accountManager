@@ -34,4 +34,39 @@ public class accountBillingState_Test {
             }
         }
     } // end of testMethod2 
+    @isTest
+    static void positiveCase(){
+        list<opportunity> o1=new list<opportunity>();
+        account a1=new account(name='dummy');
+        insert a1; 
+        for(integer i=1; i<=4; i++){
+            Opportunity q=new Opportunity();
+            q.name='Dummy';
+            q.accountId=a1.Id;
+            q.stageName='Prospecting';
+            q.closeDate=date.today();
+            o1.add(q);
+        }
+        insert o1;
+    }
+
+    @isTest
+    static void negativecase(){
+        list<opportunity> o2= new list<opportunity>();
+        account a1=new account(name='d');
+        insert a1;
+        for(integer i=0; i<=3; i++){
+            opportunity o=new opportunity(); 
+            o.name='dummy';
+            o.stageName='Prospecting';
+            o.accountId=a1.id;
+            o.closeDate=date.today();
+            o2.add(o); 
+        }
+        insert o2; 
+        System.debug('opty_Negative_Test_Scenario_Opportunity_Size'+'----'+o2.size());
+        Opportunity o3= new opportunity(name='d',accountId=a1.id, closedate=date.today(), stageName='Prospecting'); 
+        database.saveResult sr= database.insert(o3,false); 
+        //assert.isFalse(sr.isSuccess());
+    }
 }

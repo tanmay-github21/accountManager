@@ -1,3 +1,14 @@
 <template>
-    
+    <lightning-card title="Dynamic List Comp">
+         <ul class="slds-has-dividers_bottom-space">
+            <template for:each={accounts} for:item="acc">
+                 <li key={acc.Id} data-account-id={acc.Id} onclick={handleSelect} class="slds-item slds-var-p-around_small slds-cursor-pointer">
+                    <p>{acc.Name}</p>
+                    <p>{acc.Industry}</p>
+                    <p>{acc.createdDate}</p>
+                    <p>{acc.lastModifieddate}</p>
+                  </li>
+            </template>
+         </ul>
+    </lightning-card>
 </template>

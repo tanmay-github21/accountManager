@@ -4,6 +4,6 @@ public with sharing class dynamicAction_Accounts {
     }
     @AuraEnabled(cacheable=true)
     public static list<account> getAccounts(){
-        return [select name, industry,format(createddate),format(lastModifieddate) from account where industry !='' Limit 20]; 
+        return [select name, industry,format(createddate),format(lastModifieddate),lastModifiedBy.Name from account where industry !='' Limit 20]; 
     }
 }

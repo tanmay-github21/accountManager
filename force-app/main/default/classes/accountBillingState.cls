@@ -43,13 +43,13 @@ public with sharing class accountBillingState {
         map<id,account> accMap= new map<id,account>([select id,(select id,accountId from opportunities where isClosed=false)from account where id IN:idSet]);
         for(Opportunity o1:ops){
             if(o1.accountId!=Null && accMap.containsKey(o1.accountId)){
-                SYstem.debug('Opportunity tester main class map contains key'+'\t'+o1.accountId); 
                 if(accMap.get(o1.accountId).opportunities.size()<=4){
                     System.debug('Opportunity tester main class opty size is'+'\t'+
                     accMap.get(o1.accountId).Opportunities.size());
                 }
                 else {
-                    System.debug('Opportunity tester main class has'+'\t'+accMap.get(o1.accountId).Opportunities.size()+'\t'+'opportunities');
+                    System.debug('Opportunity tester main class has'+'\t'+accMap.get(o1.accountId).Opportunities.size());
+                    o1.addError('Account cant have more than 4 active opportunities'); 
                 } 
             } //map contains key
         }

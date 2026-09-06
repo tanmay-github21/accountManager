@@ -1,5 +1,6 @@
 @isTest
 public class accountBillingState_Test {
+    integer dmlRows=limits.getDmlRows(), dmlStatements=limits.getDmlStatements(), cpuTime=limits.getCputime(), heapSize=limits.getHeapSize();
     @isTest
     static void testMethod1(){
         list<account> acts=new list<account>{new account(name='1', type='Prospect'),
@@ -48,25 +49,49 @@ public class accountBillingState_Test {
             o1.add(q);
         }
         insert o1;
+        System.debug('Positive Test Case'+'\n'+
+        '+ve DML Statements issued'+'\t'+limits.getDmlStatements()+'\n'+
+        '+ve DML Rows Processesd'+'\t'+Limits.getdmlRows()+'\n'+
+        '+ve CPU Time Consumed'+'\t'+limits.getcpuTime()+'\n'+
+        '+ve heapSize'+'\t'+limits.getheapSize());
     }
-
     @isTest
-    static void negativecase(){
-        list<opportunity> o2= new list<opportunity>();
-        account a1=new account(name='d');
-        insert a1;
-        for(integer i=0; i<=3; i++){
-            opportunity o=new opportunity(); 
-            o.name='dummy';
-            o.stageName='Prospecting';
-            o.accountId=a1.id;
-            o.closeDate=date.today();
-            o2.add(o); 
+    static void opportunityAccount() {
+        Account a1 = new Account(Name = 'Dummy');
+        insert a1; 
+
+        Integer getDml = Limits.getDmlRows();
+        Integer getDmlStatements = Limits.getDmlStatements();
+        Integer allowedStatements = Limits.getLimitQueries(); 
+        Integer allowedDmlRows = Limits.getLimitDmlRows();
+
+        System.debug('=== TEST CLASS LIMITS METRICS ==='+'\n'+
+        'DML Rows Used: ' + getDml+'\n'+
+        'DML Statements Used:' + getDmlStatements+'\n'+
+        'SOQL Allowed'+'\t'+allowedStatements+'\n'+
+        'DML Rows Allowed'+'\t'+allowedDmlRows);
+        
+        list<opportunity> ops=new list<opportunity>(); 
+        for(integer i=0; i<5; i++){
+            opportunity op=new opportunity();
+            op.name='Dummy Opportunity'+i; 
+            op.closedate=date.today();
+            op.stageName='Prospecting';
+            op.accountId=a1.id; 
+            ops.add(op);
         }
-        insert o2; 
-        System.debug('opty_Negative_Test_Scenario_Opportunity_Size'+'----'+o2.size());
-        Opportunity o3= new opportunity(name='d',accountId=a1.id, closedate=date.today(), stageName='Prospecting'); 
-        database.saveResult sr= database.insert(o3,false); 
-        //assert.isFalse(sr.isSuccess());
+        insert ops;
+        integer optyDml= limits.getDmlRows()-getDml;
+        System.debug('=== TEST CLASS LIMIT METRICS INSERTING 5 Opportunities==='+'\n'+
+        'DML Rows Used'+'\t'+optyDml);
+        opportunity invalidOpty=new opportunity(name='Invalid',closedate=date.today(), stageName='Prospecting',accountId=a1.id);
+
+        database.saveResult sr=database.insert(invalidOpty,false); 
+
+
+        boolean success=sr.isSuccess(); 
+        assert.areEqual(false,success,'Assertion failed expected to be false');
+        assert.isFalse(sr.isSuccess());
     }
 }
+        
